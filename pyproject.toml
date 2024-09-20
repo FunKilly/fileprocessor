@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "File-Processer"
+version = "0.1.0"
+description = "Application for processing files"
+authors = ["oskarkowalczyk <kowalczykoskar966@gmail.com>"]
+package-mode = true
+
+[tool.poetry.dependencies]
+python = "^3.12"
+boto3 = "^1.35.23"
+pandas = "^2.2.2"
+pyspark = "^3.5.2"
+sqlalchemy = "^2.0.35"
+psycopg-binary = "^3.2.2"
+pefile = "^2024.8.26"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.4"
+ruff = "^0.6.4"
+ipdb = "^0.12"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"  # Ensures compatibility with Black's formatting
+line_length = 88   # Same line length as Black
+multi_line_output = 3  # Wrap imports into multiple lines when necessary
+include_trailing_comma = true  # Add trailing commas to make Black happy
+known_first_party = ["your_project"]  # Replace "your_project" with your module name
+combine_as_imports = true
+
+[tool.black]
+line-length = 88  # Black's default line length
+target-version = ['py38']  # Adjust to your Python version, e.g., py38, py39, etc.
+skip-string-normalization = false  # By default, Black normalizes quotes
+
