@@ -27,13 +27,24 @@ def download_and_process_files(s3_url, catalog_name):
     # PySpark UDF to extract metadata from a file
     def extract_metadata(file_path):
         # Implement metadata extraction logic here
-        pe = pefile.PE(file_path)
+        try:
+            pe = pefile.PE(file_path)
+        except pefile.PEFormatError:
+            return {
+            "file_path": file_path,
+            "size": os.path.getsize(file_path),
+            "file_type": "exe" if file_path.endswith(".exe") else "dll",
+            "architecture": None,
+            "imports":  0,
+            "exports":  0
+        }
+
         return {
             "file_path": file_path,
             "size": os.path.getsize(file_path),
             "file_type": "exe" if file_path.endswith(".exe") else "dll",
             "architecture": "x64" if pe.FILE_HEADER.Machine == pefile.MACHINE_TYPE['IMAGE_FILE_MACHINE_AMD64'] else "x86",
-            "imports": len(pe.DIRECTORY_ENTRY_IMPORT),
+            "imports": len(pe.DIRECTORY_ENTRY_IMPORT) if hasattr(pe, 'DIRECTORY_ENTRY_IMPORT') else 0,
             "exports": len(pe.DIRECTORY_ENTRY_EXPORT.symbols) if hasattr(pe, 'DIRECTORY_ENTRY_EXPORT') else 0
         }
 

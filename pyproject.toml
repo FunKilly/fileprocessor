@@ -13,6 +13,8 @@ pyspark = "^3.5.2"
 sqlalchemy = "^2.0.35"
 psycopg-binary = "^3.2.2"
 pefile = "^2024.8.26"
+lief = "^0.15.1"
+s3fs = "^2024.9.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"

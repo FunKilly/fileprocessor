@@ -1,15 +1,10 @@
-FROM python:3.12-slim-bullseye
+FROM bitnami/spark:latest
 
-WORKDIR /app
+# Install additional Python libraries
+RUN pip install lief
 
-# Install required packages
-COPY pyproject.toml poetry.lock ./
-RUN pip install poetry && poetry install
-
-# Install PySpark and SQLAlchemy dependencies
-RUN pip install pyspark sqlalchemy
-
-# Copy the application code
-COPY . .
-
-CMD ["python", "main.py"]
+# Set up environment (if needed)
+ENV SPARK_RPC_AUTHENTICATION_ENABLED=no
+ENV SPARK_RPC_ENCRYPTION_ENABLED=no
+ENV SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+ENV SPARK_SSL_ENABLED=no
