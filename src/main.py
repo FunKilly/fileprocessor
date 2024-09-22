@@ -1,11 +1,9 @@
-from src.file_processing.utils import initialize_spark_session
-from src.file_processing.services import get_metadeta_from_files, get_udf, process_file
-
 from src.database.db import get_db_session
-
 from src.database.file_metadata import FileMetadata
+from src.file_processing.services import get_metadeta_from_files, get_udf, process_file
+from src.file_processing.utils import initialize_spark_session
+from src.file_storage.storage import FileSourceEnum, get_files_to_process
 from src.utils import EnvironmentEnum
-from src.file_storage.storage import get_files_to_process, FileSourceEnum
 
 
 def process_files(
@@ -31,11 +29,15 @@ def process_files(
 
 
 if __name__ == "__main__":
-    import time
     import os
+    import time
 
-    os.environ["DATABASE_URL"] = "postgresql+psycopg2://user:Test1234!@localhost:5432/processing_db"
-    os.getenv("DATABASE_URL") == "postgresql://user:Test1234!@localhost:5432/processing_db"
+    os.environ["DATABASE_URL"] = (
+        "postgresql+psycopg2://user:Test1234!@localhost:5432/processing_db"
+    )
+    os.getenv(
+        "DATABASE_URL"
+    ) == "postgresql://user:Test1234!@localhost:5432/processing_db"
     start_time = time.time()
     process_files(number_of_files=200)
     end_time = time.time()

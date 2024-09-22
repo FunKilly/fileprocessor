@@ -1,8 +1,7 @@
 import os
 
 from sqlalchemy import Column, Integer, MetaData, String, Table, create_engine
-from sqlalchemy.orm import  sessionmaker
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 
 class Base(DeclarativeBase):
@@ -16,7 +15,6 @@ metadata = MetaData()
 DATABASE_URL = os.getenv("DATABASE_URL")
 URL = "postgresql+psycopg2://user:Test1234!@localhost:5432/processing_db"
 engine = create_engine(URL)
-
 
 
 def get_db_session():

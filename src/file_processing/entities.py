@@ -1,5 +1,6 @@
-from dataclasses import dataclass, field
 import io
+from dataclasses import dataclass, field
+
 import pefile
 
 

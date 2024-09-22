@@ -1,7 +1,9 @@
-from .db import Base
-from sqlalchemy import Column, Integer, String, select, DateTime
-from sqlalchemy.orm import Session
 from datetime import datetime
+
+from sqlalchemy import Column, DateTime, Integer, String, select
+from sqlalchemy.orm import Session
+
+from .db import Base
 
 
 class FileMetadata(Base):

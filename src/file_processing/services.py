@@ -1,10 +1,11 @@
-from pyspark.sql.functions import udf, monotonically_increasing_id
-from pyspark.sql.types import StructType, StructField, StringType, LongType, IntegerType
+import io
+from logging import getLogger
+
+import pefile
+from pyspark.sql.functions import monotonically_increasing_id, udf
+from pyspark.sql.types import IntegerType, LongType, StringType, StructField, StructType
 
 from .entities import PeFile
-import io
-import pefile
-from logging import getLogger
 
 logger = getLogger(__name__)
 

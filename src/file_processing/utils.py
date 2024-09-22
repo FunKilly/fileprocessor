@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
-from src.utils import EnvironmentEnum
+
 from src.file_storage.storage import FileSourceEnum
+from src.utils import EnvironmentEnum
 
 
 def initialize_spark_session(
