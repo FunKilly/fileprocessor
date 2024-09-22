@@ -1,6 +1,7 @@
 FROM bitnami/spark:latest
 
 # Install additional Python libraries
+RUN pip install pefile
 RUN pip install lief
 
 # Set up environment (if needed)
