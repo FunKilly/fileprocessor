@@ -26,11 +26,8 @@ def initialize_spark_session(
             "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider",
         )
 
-    # Environment-specific configurations
-    if environment == EnvironmentEnum.LIVE:
+    if environment == EnvironmentEnum.LOCAL:
         builder = builder.config("spark.executor.memory", "8g")
         builder = builder.config("spark.executor.cores", "4")
-    elif environment == EnvironmentEnum.LOCAL:
-        builder = builder.config("spark.executor.memory", "1g")
 
     return builder.getOrCreate()

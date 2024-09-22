@@ -16,8 +16,8 @@ def process_files(
     spark_session = initialize_spark_session(
         environment=environment, file_source=file_source
     )
-    # db_session = get_db_session()
-    # existing_file_paths = FileMetadata.get_all_file_paths(db_session)
+    db_session = get_db_session()
+    existing_file_paths = FileMetadata.get_all_file_paths(db_session)
     existing_file_paths = []
 
     files_df = get_files_to_process(
@@ -32,9 +32,12 @@ def process_files(
 
 if __name__ == "__main__":
     import time
+    import os
 
+    os.environ["DATABASE_URL"] = "postgresql+psycopg2://user:Test1234!@localhost:5432/processing_db"
+    os.getenv("DATABASE_URL") == "postgresql://user:Test1234!@localhost:5432/processing_db"
     start_time = time.time()
-    process_files(number_of_files=100)
+    process_files(number_of_files=200)
     end_time = time.time()
 
     print(f"took {end_time - start_time}")
