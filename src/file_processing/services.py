@@ -37,6 +37,12 @@ def get_udf(udf_function):
 
 
 def get_metadeta_from_files(files_df, udf_function):
+    num_partitions = files_df.rdd.getNumPartitions()
+
+    # If your DataFrame is small, reduce partitions, for large ones, repartition
+    if num_partitions < 10 and files_df.count() > 1000:  # Example condition
+        files_df = files_df.repartition(10)
+
     files_with_metadata_df = files_df.withColumn(
         "metadata", udf_function(files_df["path"], files_df["content"])
     )

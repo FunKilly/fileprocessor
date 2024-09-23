@@ -44,14 +44,14 @@ def initialize_spark_session(
         )
 
     if environment == EnvironmentEnum.LOCAL:
-        builder = builder.config("spark.driver.memory", "8g")
-        builder = builder.config("spark.executor.memory", "8g")
-        builder = builder.config("spark.executor.cores", "8")
+        builder.config("spark.driver.memory", "8g"
+                       ).config("spark.executor.memory", "8g"
+        ).config("spark.executor.cores", "8")
 
     session = builder.getOrCreate()
 
     session.sparkContext.addPyFile("src.zip")
-    session.sparkContext.setLogLevel("WARNING")
+    session.sparkContext.setLogLevel("INFO")
 
     logger.warning(f"Running application with {parallelism}")
     return session

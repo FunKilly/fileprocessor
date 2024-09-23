@@ -68,8 +68,8 @@ class PeFile:
     def get_metadata(self):
         return (
             self.path,
-            self.architecture,
             self.file_type,
+            self.architecture,
             self.size,
             self.imports_number,
             self.exports_number,

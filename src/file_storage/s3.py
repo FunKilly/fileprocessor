@@ -1,7 +1,5 @@
 import os
 
-from src.file_processing.services import logger
-
 
 def list_files_from_s3(session, number_of_files, excluded_paths: list[str]):
     bucket_name = os.environ.get("BUCKET_NAME", "s3-nord-challenge-data")
@@ -23,7 +21,6 @@ def list_files_from_s3(session, number_of_files, excluded_paths: list[str]):
         combined_df = dataframes[0]
         for df in dataframes[1:]:
             combined_df = combined_df.union(df)
-        logger.error(f"file count {combined_df.count()}")
         return combined_df
 
     return session.createDataFrame([], schema=files_df.schema)
