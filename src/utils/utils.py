@@ -4,12 +4,9 @@ from multiprocessing import cpu_count
 from pyspark.sql import SparkSession
 
 from src.file_storage.storage import FileSourceEnum
+from src.utils.settings import settings
 
-parallelism = min(32, cpu_count())
-
-from logging import getLogger
-
-logger = getLogger(__name__)
+parallism_count = min(32, cpu_count())
 
 
 class EnvironmentEnum(StrEnum):
@@ -21,15 +18,16 @@ def initialize_spark_session(
     environment: EnvironmentEnum, file_source: FileSourceEnum
 ) -> SparkSession:
     master_url = (
-        "local[*]" if environment == EnvironmentEnum.LOCAL else "spark://localhost:7077"
+        "local[*]"
+        if environment == EnvironmentEnum.LOCAL
+        else "spark://spark-master:7077"
     )
     builder = (
         SparkSession.builder.appName("Distributed File Downloader")
         .master(master_url)
-        .config("spark.default.parallelism", parallelism)
-        .config("spark.executor.extraClassPath", "src/jars/postgresql-42.3.4.jar")
-        .config("spark.driver.extraClassPath", "src/jars/postgresql-42.3.4.jar")
-        .config("spark.executor.extraJavaOptions", "-XX:+UseG1GC")
+        .config("spark.executor.memory", settings.SPARK_WORKER_MEMORY)
+        .config("spark.executor.cores", settings.SPARK_WORKER_CORES)
+        .config("spark.jars", "/opt/postgresql-42.5.0.jar")
     )
 
     if file_source == FileSourceEnum.S3:
@@ -40,18 +38,27 @@ def initialize_spark_session(
             "org.apache.hadoop:hadoop-aws:3.2.0,org.apache.hadoop:hadoop-common:3.2.0",
         ).config(
             "spark.hadoop.fs.s3a.aws.credentials.provider",
-            "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider",
+            "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider",
+        ).config(
+            "spark.hadoop.fs.s3a.connection.maximum", "100"
+        ).config(
+            "spark.hadoop.fs.s3a.threads.max", "100"
         )
 
     if environment == EnvironmentEnum.LOCAL:
-        builder.config("spark.driver.memory", "8g"
-                       ).config("spark.executor.memory", "8g"
-        ).config("spark.executor.cores", "8")
+        builder.config("spark.driver.memory", "8g").config(
+            "spark.executor.memory", "8g"
+        ).config("spark.executor.cores", "8").config(
+            "spark.jars", "jars/postgresql-42.5.0.jar"
+        ).config(
+            "spark.executor.memory", "5G"
+        ).config(
+            "spark.executor.cores", 5
+        )
 
     session = builder.getOrCreate()
 
     session.sparkContext.addPyFile("src.zip")
-    session.sparkContext.setLogLevel("INFO")
+    session.sparkContext.setLogLevel("WARN")
 
-    logger.warning(f"Running application with {parallelism}")
     return session

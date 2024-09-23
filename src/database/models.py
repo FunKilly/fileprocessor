@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, select
 from sqlalchemy.orm import Session
 
-from .db import Base
+from .utils import Base
 
 
 class FileMetadata(Base):

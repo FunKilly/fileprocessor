@@ -17,7 +17,7 @@ class PeFile:
     size: int = field(init=False)
 
     def __post_init__(self):
-        self.pe_handler = pefile.PE(data=self.content.read())
+        self.pe_handler = pefile.PE(data=self.content.read(), fast_load=True)
         self.architecture = self._get_architecture_type()
         self.imports_number = self._get_imports_number()
         self.exports_number = self._get_exports_number()

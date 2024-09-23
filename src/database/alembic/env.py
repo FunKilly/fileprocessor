@@ -3,8 +3,9 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from src.database.db import Base
-from src.database.file_metadata import FileMetadata
+from src.database.models import FileMetadata
+from src.database.utils import Base
+from src.utils.settings import settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -23,8 +24,7 @@ import os
 
 
 def get_url():
-    # TODO Return dynamically
-    return "postgresql+psycopg2://user:Test1234!@localhost:5432/processing_db"
+    return str(settings.SQLALCHEMY_DATABASE_URI)
 
 
 def run_migrations_offline() -> None:
