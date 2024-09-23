@@ -22,6 +22,7 @@ class PeFile:
         self.imports_number = self._get_imports_number()
         self.exports_number = self._get_exports_number()
         self.size = self._get_size()
+        self.file_type = self._get_file_type()
 
     def _get_architecture_type(self) -> str | None:
         if not hasattr(self.pe_handler, "FILE_HEADER") or not hasattr(
@@ -55,10 +56,20 @@ class PeFile:
     def _get_size(self) -> int:
         return self.content.getbuffer().nbytes
 
+    def _get_file_type(self):
+        characteristics = self.pe_handler.FILE_HEADER.Characteristics
+        if characteristics & 0x2000:
+            return "DLL"
+        elif characteristics & 0x0002:
+            return "EXE"
+
+        return None
+
     def get_metadata(self):
         return (
             self.path,
             self.architecture,
+            self.file_type,
             self.size,
             self.imports_number,
             self.exports_number,

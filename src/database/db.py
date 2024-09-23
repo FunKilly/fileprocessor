@@ -12,9 +12,14 @@ metadata = MetaData()
 
 
 # Create the table in the database
-DATABASE_URL = os.getenv("DATABASE_URL")
-URL = "postgresql+psycopg2://user:Test1234!@localhost:5432/processing_db"
-engine = create_engine(URL)
+
+
+def get_db_url():
+    # TODO DATABASE_URL = os.getenv("DATABASE_URL")
+    return "postgresql+psycopg2://user:Test1234!@localhost:5432/processing_db"
+
+
+engine = create_engine(get_db_url())
 
 
 def get_db_session():

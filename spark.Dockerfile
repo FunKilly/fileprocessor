@@ -1,7 +1,5 @@
 FROM bitnami/spark:latest
 
-# Install additional Python libraries
-
 RUN pip install pefile
 
 # Set up environment (if needed)
