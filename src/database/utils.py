@@ -1,6 +1,5 @@
-import os
 
-from sqlalchemy import Column, Integer, MetaData, String, Table, create_engine
+from sqlalchemy import MetaData, create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from src.utils.settings import settings

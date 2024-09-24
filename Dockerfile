@@ -62,4 +62,4 @@ RUN curl -L -o /opt/postgresql-42.5.0.jar https://jdbc.postgresql.org/download/p
 
 RUN /usr/bin/python3.12 --version
 
-ENTRYPOINT ["bash", "/processing-app/entrypoint.sh", "10"]
+ENTRYPOINT ["bash", "/processing-app/entrypoint.sh", "-n 10"]

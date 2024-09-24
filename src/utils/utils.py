@@ -1,12 +1,9 @@
 from enum import StrEnum
-from multiprocessing import cpu_count
 
 from pyspark.sql import SparkSession
 
 from src.file_storage.storage import FileSourceEnum
 from src.utils.settings import settings
-
-parallism_count = min(32, cpu_count())
 
 
 class EnvironmentEnum(StrEnum):
@@ -22,6 +19,7 @@ def initialize_spark_session(
         if environment == EnvironmentEnum.LOCAL
         else "spark://spark-master:7077"
     )
+
     builder = (
         SparkSession.builder.appName("Distributed File Downloader")
         .master(master_url)
@@ -51,9 +49,9 @@ def initialize_spark_session(
         ).config("spark.executor.cores", "8").config(
             "spark.jars", "jars/postgresql-42.5.0.jar"
         ).config(
-            "spark.executor.memory", "5G"
+            "spark.executor.memory", "4G"
         ).config(
-            "spark.executor.cores", 5
+            "spark.executor.cores", 4
         )
 
     session = builder.getOrCreate()

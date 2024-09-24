@@ -1,3 +1,4 @@
+import argparse
 import time
 from logging import getLogger
 
@@ -18,7 +19,8 @@ def process_files(
     environment: EnvironmentEnum = EnvironmentEnum.LOCAL,
 ):
     logger.info(
-        f"{number_of_files} files to process. File source: {file_source.value}. Environment: {environment.value}"
+        f"{number_of_files} files to process. File source: {file_source.value}. "
+        f"Environment: {environment.value}"
     )
     spark_session = initialize_spark_session(
         environment=environment, file_source=file_source
@@ -32,7 +34,18 @@ def process_files(
     add_metadata_to_database(metadeta_df)
 
 
+def get_script_arguments():
+    global parser, args
+    parser = argparse.ArgumentParser(description="Process a specified number of files.")
+    parser.add_argument(
+        "-n", "--number", type=int, default=100, help="Number of files to process"
+    )
+    # Parse the arguments
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    args = get_script_arguments()
 
     start_time = time.time()
     environment = (
@@ -40,7 +53,7 @@ if __name__ == "__main__":
         if settings.ENVIRONMENT == "live"
         else EnvironmentEnum.LOCAL
     )
-    process_files(number_of_files=100, environment=environment)
+    process_files(number_of_files=args.number, environment=environment)
     end_time = time.time()
 
     print(f"took {end_time - start_time}")

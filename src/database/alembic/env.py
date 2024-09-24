@@ -3,7 +3,6 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from src.database.models import FileMetadata
 from src.database.utils import Base
 from src.utils.settings import settings
 
@@ -20,7 +19,6 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 
-import os
 
 
 def get_url():

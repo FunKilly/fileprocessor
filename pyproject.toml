@@ -23,6 +23,11 @@ pydantic-settings = "^2.5.2"
 flake8 = "^3.8.4"
 ruff = "^0.6.4"
 ipdb = "^0.12"
+importlib-metadata = "<4.3"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.7"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -36,8 +41,10 @@ include_trailing_comma = true  # Add trailing commas to make Black happy
 known_first_party = ["your_project"]  # Replace "your_project" with your module name
 combine_as_imports = true
 
-[tool.black]
-line-length = 88  # Black's default line length
-target-version = ['py38']  # Adjust to your Python version, e.g., py38, py39, etc.
-skip-string-normalization = false  # By default, Black normalizes quotes
 
+[tool.ruff]
+line-length = 88  # Set your desired line length here
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = ["E203", "E701", "W291"]
