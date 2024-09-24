@@ -1,4 +1,3 @@
-from enum import StrEnum
 from multiprocessing import cpu_count
 
 from pyspark.sql import SparkSession
@@ -6,10 +5,7 @@ from pyspark.sql import SparkSession
 from src.file_storage.entities import FileSourceEnum
 from src.utils.settings import settings
 
-
-class EnvironmentEnum(StrEnum):
-    LOCAL = "local"
-    LIVE = "live"
+from .entities import EnvironmentEnum
 
 
 def initialize_spark_session(
@@ -39,9 +35,7 @@ def initialize_spark_session(
         ).config(
             "spark.hadoop.fs.s3a.aws.credentials.provider",
             "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider",
-        ).config(
-            "spark.hadoop.fs.s3a.connection.maximum", "200"
-        ).config(
+        ).config("spark.hadoop.fs.s3a.connection.maximum", "200").config(
             "spark.hadoop.fs.s3a.threads.max", "150"
         )
 
@@ -50,11 +44,7 @@ def initialize_spark_session(
             "spark.executor.memory", "8g"
         ).config("spark.executor.cores", "8").config(
             "spark.jars", "jars/postgresql-42.5.0.jar"
-        ).config(
-            "spark.executor.memory", "4G"
-        ).config(
-            "spark.executor.cores", 4
-        )
+        ).config("spark.executor.memory", "4G").config("spark.executor.cores", 4)
 
     session = builder.getOrCreate()
 
@@ -78,4 +68,4 @@ def singleton_function(func):
 
 @singleton_function
 def get_spark_session() -> SparkSession:
-    return initialize_spark_session(EnvironmentEnum.LOCAL, FileSourceEnum.S3)
+    return initialize_spark_session(settings.ENVIRONMENT, settings.FILE_SOURCE)

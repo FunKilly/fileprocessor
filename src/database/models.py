@@ -28,18 +28,3 @@ class FileMetadata(Base):
         session.add(self)
         session.commit()
         return self
-
-    @classmethod
-    def bulk_create(
-        cls, session: Session, records: list["FileMetadata"]
-    ) -> list["FileMetadata"]:
-        """
-        Inserts a list of FileMetadata records in batch.
-
-        Args:
-            session (Session): SQLAlchemy session.
-            records (list[FileMetadata]): List of FileMetadata objects to be inserted.
-        """
-        session.bulk_save_objects(records)
-        session.commit()
-        return records

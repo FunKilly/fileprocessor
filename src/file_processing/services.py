@@ -36,8 +36,11 @@ def get_udf(udf_function):
     )
 
 
-def get_metadeta_from_files(files_df, udf_function):
-    return files_df.withColumn(
+def extract_metadata_from_files(files_df):
+    files_df.cache()
+    udf_function = get_udf(process_file)
+
+    metadeta_df = files_df.withColumn(
         "metadata", udf_function(files_df["path"], files_df["content"])
     ).select(
         "metadata.file_path",
@@ -47,11 +50,5 @@ def get_metadeta_from_files(files_df, udf_function):
         "metadata.imports",
         "metadata.exports",
     )
-
-
-def extract_metadata_from_files(files_df):
-    files_df.cache()
-    udf_function = get_udf(process_file)
-    metadeta_df = get_metadeta_from_files(files_df, udf_function)
 
     return metadeta_df

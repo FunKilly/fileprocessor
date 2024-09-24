@@ -11,9 +11,6 @@ class Base(DeclarativeBase):
 metadata = MetaData()
 
 
-# Create the table in the database
-
-
 def get_db_url() -> str:
     return str(settings.SQLALCHEMY_DATABASE_URI)
 

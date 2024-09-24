@@ -1,8 +1,11 @@
-from typing import Literal, Optional
+from typing import Optional
 
-from pydantic import BaseModel, Field, PostgresDsn, computed_field
+from pydantic import Field, PostgresDsn, computed_field, field_validator
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from src.file_storage.entities import FileSourceEnum
+from src.utils.entities import EnvironmentEnum
 
 
 class S3StorageSettings(BaseSettings):
@@ -19,7 +22,8 @@ class Settings(BaseSettings):
         env_file=".env", env_ignore_empty=True, extra="ignore"
     )
 
-    ENVIRONMENT: Literal["local", "live"] = "local"
+    ENVIRONMENT: EnvironmentEnum = EnvironmentEnum.LOCAL
+    FILE_SOURCE: FileSourceEnum = FileSourceEnum.S3
 
     POSTGRES_SERVER: str = "db"
     POSTGRES_PORT: int = 5432
@@ -45,6 +49,30 @@ class Settings(BaseSettings):
     s3_storage: Optional[S3StorageSettings] = Field(
         description="S3 storage settings", default_factory=S3StorageSettings
     )
+
+    @classmethod
+    @field_validator("ENVIRONMENT")
+    def validate_environment(cls, value):
+        # Normalize to upper case to match Enum
+        if isinstance(value, str):
+            value = value.upper()
+        if value not in EnvironmentEnum.__members__:
+            raise ValueError(
+                f"Invalid environment: {value}. Must be one of {list(EnvironmentEnum)}"
+            )
+        return EnvironmentEnum[value]
+
+    @classmethod
+    @field_validator("FILE_SOURCE")
+    def validate_environment(cls, value):
+        # Normalize to upper case to match Enum
+        if isinstance(value, str):
+            value = value.upper()
+        if value not in FileSourceEnum.__members__:
+            raise ValueError(
+                f"Invalid environment: {value}. Must be one of {list(FileSourceEnum)}"
+            )
+        return FileSourceEnum[value]
 
 
 settings = Settings()
