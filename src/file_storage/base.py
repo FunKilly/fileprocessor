@@ -13,7 +13,7 @@ class Storage(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def filter_files(self, files: DataFrame):
+    def filter_files(self, files: DataFrame, existing_file_paths):
         raise NotImplementedError
 
     @abstractmethod

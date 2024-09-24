@@ -15,7 +15,7 @@ def process_files(
     number_of_files: int = 1,
     file_source: FileSourceEnum = FileSourceEnum.S3,
     environment: EnvironmentEnum = EnvironmentEnum.LOCAL,
-):
+) -> None:
     logger.info(
         f"{number_of_files} files to process. File source: {file_source.value}. "
         f"Environment: {environment.value}"
@@ -29,7 +29,7 @@ def process_files(
     add_metadata_to_database(metadeta_df)
 
 
-def get_script_arguments():
+def get_script_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Process a specified number of files.")
     parser.add_argument(
         "-n", "--number", type=int, default=100, help="Number of files to process"

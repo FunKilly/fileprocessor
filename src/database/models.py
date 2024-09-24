@@ -19,7 +19,7 @@ class FileMetadata(Base):
     created_at = Column(DateTime, default=datetime.now())
 
     @staticmethod
-    def get_all_file_paths(db_session: Session):
+    def get_all_file_paths(db_session: Session) -> list[str]:
         query = select(FileMetadata.file_path)
         result = db_session.scalars(query).all()
         return result

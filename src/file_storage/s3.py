@@ -15,14 +15,14 @@ class S3Storage(Storage):
         self.session = get_spark_session()
         self.file_amount = file_amount
 
-    def download_files(self, path: str):
+    def download_files(self, path: str) -> DataFrame:
         files = self.session.read.format("binaryFile").load(path)
 
         # Reduce number of partitions for better performance while working on small files
         files = files.coalesce(cpu_count())
         return files
 
-    def list_files(self):
+    def list_files(self) -> DataFrame:
         dataframes = []
         db_session = get_db_session()
 
@@ -43,7 +43,7 @@ class S3Storage(Storage):
 
     def filter_files(
         self, files: DataFrame, existing_file_paths: "Broadcast[list[str]]"
-    ):
+    ) -> DataFrame:
         limit_for_single_dir = int(
             self.file_amount / len(settings.s3_storage.DIRECTORIES)
         )
