@@ -54,6 +54,7 @@ COPY entrypoint.sh entrypoint.sh
 
 COPY . /processing-app/
 COPY alembic.ini ./processing-app/
+COPY .env /processing-app/
 WORKDIR /processing-app
 
 # Add the PostgreSQL JDBC driver
@@ -62,4 +63,4 @@ RUN curl -L -o /opt/postgresql-42.5.0.jar https://jdbc.postgresql.org/download/p
 
 RUN /usr/bin/python3.12 --version
 
-ENTRYPOINT ["bash", "/processing-app/entrypoint.sh", "-n 10"]
+ENTRYPOINT ["bash", "/processing-app/entrypoint.sh", "10"]

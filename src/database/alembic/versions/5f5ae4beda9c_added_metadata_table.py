@@ -1,7 +1,7 @@
 """Added Metadata table
 
 Revision ID: 5f5ae4beda9c
-Revises: 
+Revises:
 Create Date: 2024-09-22 15:13:29.709916
 
 """

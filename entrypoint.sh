@@ -12,4 +12,4 @@ NUMBER_OF_FILES=$1
 alembic upgrade head
 
 # Run the Python application with the specified number of files
-/opt/pysetup/.venv/bin/python -m src.main "$NUMBER_OF_FILES"
+/opt/pysetup/.venv/bin/python -m src.main -n "$NUMBER_OF_FILES"

@@ -1,8 +1,17 @@
-from typing import Literal
+from typing import Literal, Optional
 
-from pydantic import PostgresDsn, computed_field
+from pydantic import BaseModel, Field, PostgresDsn, computed_field
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class S3StorageSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env", env_ignore_empty=True, extra="ignore", env_prefix="S3_STORAGE_"
+    )
+
+    BUCKET_NAME: str | None
+    DIRECTORIES: list[str | int] | None
 
 
 class Settings(BaseSettings):
@@ -32,6 +41,10 @@ class Settings(BaseSettings):
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
         )
+
+    s3_storage: Optional[S3StorageSettings] = Field(
+        description="S3 storage settings", default_factory=S3StorageSettings
+    )
 
 
 settings = Settings()

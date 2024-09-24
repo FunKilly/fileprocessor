@@ -1,8 +1,9 @@
 from enum import StrEnum
+from multiprocessing import cpu_count
 
 from pyspark.sql import SparkSession
 
-from src.file_storage.storage import FileSourceEnum
+from src.file_storage.entities import FileSourceEnum
 from src.utils.settings import settings
 
 
@@ -25,6 +26,7 @@ def initialize_spark_session(
         .master(master_url)
         .config("spark.executor.memory", settings.SPARK_WORKER_MEMORY)
         .config("spark.executor.cores", settings.SPARK_WORKER_CORES)
+        .config("spark.default.parallelism", cpu_count())
         .config("spark.jars", "/opt/postgresql-42.5.0.jar")
     )
 
@@ -37,10 +39,8 @@ def initialize_spark_session(
         ).config(
             "spark.hadoop.fs.s3a.aws.credentials.provider",
             "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider",
-        ).config(
-            "spark.hadoop.fs.s3a.connection.maximum", "100"
-        ).config(
-            "spark.hadoop.fs.s3a.threads.max", "100"
+        ).config("spark.hadoop.fs.s3a.connection.maximum", "200").config(
+            "spark.hadoop.fs.s3a.threads.max", "150"
         )
 
     if environment == EnvironmentEnum.LOCAL:
@@ -48,11 +48,7 @@ def initialize_spark_session(
             "spark.executor.memory", "8g"
         ).config("spark.executor.cores", "8").config(
             "spark.jars", "jars/postgresql-42.5.0.jar"
-        ).config(
-            "spark.executor.memory", "4G"
-        ).config(
-            "spark.executor.cores", 4
-        )
+        ).config("spark.executor.memory", "4G").config("spark.executor.cores", 4)
 
     session = builder.getOrCreate()
 
@@ -60,3 +56,20 @@ def initialize_spark_session(
     session.sparkContext.setLogLevel("WARN")
 
     return session
+
+
+def singleton_function(func):
+    instance = None
+
+    def wrapper(*args, **kwargs):
+        nonlocal instance
+        if instance is None:
+            instance = func(*args, **kwargs)
+        return instance
+
+    return wrapper
+
+
+@singleton_function
+def get_spark_session():
+    return initialize_spark_session(EnvironmentEnum.LOCAL, FileSourceEnum.S3)
