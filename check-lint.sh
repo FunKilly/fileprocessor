@@ -11,7 +11,7 @@ fi
 
 # Run ruff for linting (includes formatting checks)
 echo "Running ruff..."
-ruff --fix --select E, F src tests
+ruff check src tests
 
 if [ $? -ne 0 ]; then
     echo "ruff found issues. Please fix the reported issues."

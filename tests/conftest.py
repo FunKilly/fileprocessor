@@ -2,10 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from src.database.models import (  # Replace with your actual base model
-    Base,
-    FileMetadata,
-)
+from src.database.models import Base, FileMetadata  # Replace with your actual base model
 
 
 @pytest.fixture(scope="session")

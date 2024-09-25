@@ -37,7 +37,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"  # Ensures compatibility with Black's formatting
-line_length = 88   # Same line length as Black
+line_length = 100   # Same line length as Black
 multi_line_output = 3  # Wrap imports into multiple lines when necessary
 include_trailing_comma = true  # Add trailing commas to make Black happy
 known_first_party = ["your_project"]  # Replace "your_project" with your module name
@@ -45,7 +45,7 @@ combine_as_imports = true
 
 
 [tool.ruff]
-line-length = 88  # Set your desired line length here
+line-length = 100  # Set your desired line length here
 
 [tool.ruff.lint]
 select = ["E", "F", "W"]

@@ -1,5 +1,6 @@
 from multiprocessing import cpu_count
 
+from pyspark.broadcast import Broadcast
 from pyspark.sql import DataFrame
 
 from src.database.models import FileMetadata

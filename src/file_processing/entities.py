@@ -6,8 +6,6 @@ import pefile
 
 @dataclass
 class PeFile:
-    """Class for keeping track of an item in inventory."""
-
     content: io.BytesIO
     path: str
     pe_handler: pefile.PE = field(init=False)
@@ -31,7 +29,7 @@ class PeFile:
             return None
 
         machine_type = self.pe_handler.FILE_HEADER.Machine
-        # Determine the architecture based on the Machine field
+
         if machine_type == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_AMD64"]:
             return "x64"
         elif machine_type == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_I386"]:

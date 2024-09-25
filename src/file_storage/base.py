@@ -5,7 +5,7 @@ from pyspark.sql import DataFrame
 
 class Storage(ABC):
     @abstractmethod
-    def __init__(self, config):
+    def __init__(self, file_amount: int):
         raise NotImplementedError
 
     @abstractmethod

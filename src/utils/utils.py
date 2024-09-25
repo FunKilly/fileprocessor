@@ -24,6 +24,7 @@ def initialize_spark_session(
         .config("spark.executor.cores", settings.SPARK_WORKER_CORES)
         .config("spark.default.parallelism", cpu_count())
         .config("spark.jars", "/opt/postgresql-42.5.0.jar")
+        .config("spark.eventLog.enabled", "false")
     )
 
     if file_source == FileSourceEnum.S3:
@@ -35,21 +36,15 @@ def initialize_spark_session(
         ).config(
             "spark.hadoop.fs.s3a.aws.credentials.provider",
             "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider",
-        ).config("spark.hadoop.fs.s3a.connection.maximum", "200").config(
-            "spark.hadoop.fs.s3a.threads.max", "150"
-        )
+        ).config("spark.hadoop.fs.s3a.connection.maximum", "75").config(
+            "spark.hadoop.fs.s3a.threads.max", "50")
 
     if environment == EnvironmentEnum.LOCAL:
-        builder.config("spark.driver.memory", "8g").config(
-            "spark.executor.memory", "8g"
-        ).config("spark.executor.cores", "8").config(
-            "spark.jars", "jars/postgresql-42.5.0.jar"
-        ).config("spark.executor.memory", "4G").config("spark.executor.cores", 4)
+        builder.config("spark.jars", "jars/postgresql-42.5.0.jar")
 
     session = builder.getOrCreate()
 
     session.sparkContext.addPyFile("src.zip")
-    session.sparkContext.setLogLevel("WARN")
 
     return session
 

@@ -3,9 +3,7 @@ from io import BytesIO
 import pytest
 from pefile import PEFormatError
 
-from src.file_processing.entities import (  # Adjust the import according to your structure
-    PeFile,
-)
+from src.file_processing.entities import PeFile
 
 
 @pytest.fixture

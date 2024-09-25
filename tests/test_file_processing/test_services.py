@@ -54,14 +54,15 @@ def test_process_file_corrupted(mocker):
 
 
 def test_get_udf():
-    sample_udf = lambda file_path, file_content: (
-        file_path,
-        "exe",
-        "x86_64",
-        12345,
-        5,
-        10,
-    )
+    def sample_udf(file_path: str, file_content: str) -> tuple:
+        return (
+            file_path,
+            "exe",
+            "x86_64",
+            12345,
+            5,
+            10,
+        )
     udf_function = get_udf(sample_udf)
 
     assert udf_function.returnType.fields[0].name == "file_path"

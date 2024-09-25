@@ -53,7 +53,6 @@ class Settings(BaseSettings):
     @classmethod
     @field_validator("ENVIRONMENT")
     def validate_environment(cls, value):
-        # Normalize to upper case to match Enum
         if isinstance(value, str):
             value = value.upper()
         if value not in EnvironmentEnum.__members__:
@@ -64,8 +63,7 @@ class Settings(BaseSettings):
 
     @classmethod
     @field_validator("FILE_SOURCE")
-    def validate_environment(cls, value):
-        # Normalize to upper case to match Enum
+    def validate_file_source(cls, value):
         if isinstance(value, str):
             value = value.upper()
         if value not in FileSourceEnum.__members__:
