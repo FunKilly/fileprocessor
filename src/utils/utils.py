@@ -41,6 +41,9 @@ def initialize_spark_session(
 
     if environment == EnvironmentEnum.LOCAL:
         builder.config("spark.jars", "jars/postgresql-42.5.0.jar")
+        builder.config("spark.driver.memory", "8g").config(
+            "spark.executor.memory", "8g"
+        )
 
     session = builder.getOrCreate()
 

@@ -8,5 +8,7 @@ to the database.
 ## Future improvements
 - After deploying stable version of pyspark, standard udfs can be replaced with pandas udfs
 - Downloading files via pyspark could be replaced by native s3 sdk
+- Consider using dataframe for already existing file paths, At this moment I didn't see performance improvements.
+
 
 
